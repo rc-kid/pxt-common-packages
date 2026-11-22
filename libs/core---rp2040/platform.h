@@ -4,7 +4,14 @@
 #include "Image.h"
 #include "Timer.h"
 
+#include "pico.h"
+// PICO_RP2350 rather than PICO_RP2040: pico-sdk 1.x (still used by the rp2040 variant) defines neither
+#if defined(PICO_RP2350) && PICO_RP2350
+// CMSIS device header for RP2350 (codal-rp2040 on pico-sdk 2.x builds for both chips)
+#include "RP2350.h"
+#else
 #include "RP2040.h"
+#endif
 #include "RP2040Pin.h"
 #include "RP2040Spi.h"
 #include "RP2040I2C.h"
