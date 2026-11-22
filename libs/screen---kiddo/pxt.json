@@ -1,0 +1,30 @@
+{
+    "name": "screen---kiddo",
+    "description": "Screen for the kidDo handheld (ST7789 on a 16-bit parallel bus, 160x120 doubled to 320x240)",
+    "files": [
+        "screen.cpp",
+        "panic.cpp",
+        "image.cpp",
+        "image.ts",
+        "screenimage.ts",
+        "text.ts",
+        "frame.ts",
+        "shims.d.ts",
+        "fieldeditors.ts",
+        "targetoverrides.ts",
+        "ns.ts",
+        "image.d.ts",
+        "pxtparts.json",
+        "imagesoverrides.jres",
+        "imagesoverrides.ts",
+        "font12.jres",
+        "KiddoDisplay.h",
+        "KiddoDisplay.cpp",
+        "ST7789_rgb16_double.pio.h",
+        "enums.d.ts"
+    ],
+    "dependencies": {
+        "core": "file:../core"
+    },
+    "additionalFilePath": "../screen"
+}

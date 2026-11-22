@@ -1,0 +1,15 @@
+; I2S master clock (MCLK) for the NAU88C22 codec on kidDo mk3 (from sdk/backend/mk3/audio/i2s_mclk.pio).
+;
+; Toggles the side set pin every instruction, so MCLK is half the state machine clock. The codec runs from MCLK
+; directly, which must be 256 * sampleRate.
+;
+; Regenerate the header with pioasm (the CODAL build does not run it):
+;     build-mk3/pioasm/pioasm -o c-sdk i2s_mclk.pio i2s_mclk.pio.h
+
+.program i2s_mclk
+.side_set 1
+
+.wrap_target
+    nop               side 0
+    nop               side 1
+.wrap

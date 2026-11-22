@@ -1,0 +1,28 @@
+; I2S output for the NAU88C22 codec on kidDo mk3, 16 bits per channel (from sdk/backend/mk3/audio/i2s_out16.pio).
+;
+; Each 32-bit word from the TX FIFO is one stereo frame, the upper 16 bits are sent first (while LRCK is high). Data
+; changes on the falling BCLK edge and is read by the codec on the rising edge. Every channel slot is 17 BCLKs long
+; (one leading bit for the I2S one-bit delay, then 16 data bits), so the state machine must run at
+; sampleRate * 34 * 2 (two instructions per BCLK).
+;
+; Regenerate the header with pioasm (the CODAL build does not run it):
+;     build-mk3/pioasm/pioasm -o c-sdk i2s_out16.pio i2s_out16.pio.h
+
+.program i2s_out16
+; side set: bit 0 BCLK, bit 1 LRCK
+.side_set 2
+.fifo tx
+.out 1 left auto 32
+
+.wrap_target
+    set x, 15         side 0b10 ; first channel (LRCK high)
+    nop               side 0b11 ; one-bit delay
+leftBit:
+    out pins, 1       side 0b10 ; output bit on falling BCLK
+    jmp x-- leftBit   side 0b11 ; codec reads on rising BCLK
+    set x, 15         side 0b00 ; second channel (LRCK low)
+    nop               side 0b01 ; one-bit delay
+rightBit:
+    out pins, 1       side 0b00
+    jmp x-- rightBit  side 0b01
+.wrap

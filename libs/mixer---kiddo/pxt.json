@@ -1,0 +1,32 @@
+{
+    "name": "mixer---kiddo",
+    "description": "Sound output for the kidDo handheld (I2S to the NAU88C22 codec)",
+    "files": [
+        "SoundOutput.h",
+        "sound.cpp",
+        "melody.h",
+        "melody.cpp",
+        "melody.ts",
+        "piano.ts",
+        "legacy.ts",
+        "ns.ts",
+        "targetoverrides.ts",
+        "music.ts",
+        "soundEffect.ts",
+        "instrument.ts",
+        "sequencer.ts",
+        "playable.ts",
+        "pxtparts.json",
+        "headphone.svg",
+        "KiddoAudio.h",
+        "KiddoAudio.cpp",
+        "i2s_mclk.pio.h",
+        "i2s_out16.pio.h",
+        "shims.d.ts",
+        "enums.d.ts"
+    ],
+    "dependencies": {
+        "core": "file:../core"
+    },
+    "additionalFilePath": "../mixer"
+}

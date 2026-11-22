@@ -1,0 +1,33 @@
+; ST7789 16-bit MCU interface writer that doubles every pixel (kidDo mk3).
+;
+; Each 32-bit word from the TX FIFO holds two RGB565 pixels: the low half is written first. Every pixel is written twice,
+; which in the display's column-first mode doubles the image vertically (MakeCode Arcade's 160x120 -> 320x240, the
+; horizontal doubling is done by sending each column twice). The words are expected to be already bit-reversed per
+; 16-bit half, because the data lanes are reversed on kidDo (DB15 is the lowest GPIO). The reversal is done when the
+; palette lookup table is built, so it costs nothing per pixel.
+;
+; Timing is the same as the kidDo SDK's ST7789_rgb16 program: 2 cycles WRX low, 3 cycles WRX high per pixel, with the
+; state machine clocked at 4x the display speed (60 MHz for 15 MHz). The FIFO refill happens during the high phase of
+; the last pixel, so a stall (no more data) leaves WRX high after the last rising edge.
+;
+; Regenerate the header with pioasm (the CODAL build does not run it):
+;     build-mk3/pioasm/pioasm -o c-sdk ST7789_rgb16_double.pio ST7789_rgb16_double.pio.h
+
+.program ST7789_rgb16_double
+.side_set 1
+
+    pull          side 0
+    out x, 16     side 0
+    out y, 16     side 0
+.wrap_target
+    mov pins, x   side 0 [1]
+    nop           side 1 [2]
+    mov pins, x   side 0 [1]
+    nop           side 1 [2]
+    mov pins, y   side 0 [1]
+    nop           side 1 [2]
+    mov pins, y   side 0 [1]
+    pull          side 1
+    out x, 16     side 1
+    out y, 16     side 1
+.wrap
